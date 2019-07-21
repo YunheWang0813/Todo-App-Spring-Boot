@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <title>TODO Builder</title>
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <script src="/js/jquery.js"></script>
+        <script src="/js/bootstrap.bundle.js"></script>
+    </head>
+    <body>
+        <div class="container border-primary mt-3 mb-3 pb-3" style="background-color: rgba(117,112,118,0.33)">
+            <nav class="row navbar navbar-expand-md navbar-light bg-info">
+                <a href="/" class="navbar-brand mr-auto font-weight-bold">TODOリスト</a>
+                <a href="/search" class="navbar-brand">検索</a>
+            </nav>
+            <div class="card m-4">
+                <h5 class="card-header">新しいToDoを作成する</h5>
+                <div class="card-body">
+                    <form th:action="@{/}" th:method="post" th:object="${task}">
+                        <div class="form-group">
+                            <label class="control-label">ToDo名</label>
+                            <input class="form-control" type="text" th:field="*{name}" />
+                            <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect</span>
+                            <span class="text-danger" th:if="${errorDupName}">This name is already used. Try another name</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">期限</label>
+                            <input class="form-control" type="date" name="due_date" />
+                            <span class="text-danger" th:if="${#fields.hasErrors('due_date')}" th:errors="*{due_date}">Incorrect</span>
+                        </div>
+                        <button class="btn btn-primary mx-auto d-block" type="submit">ToDoの追加</button>
+                    </form>
+                </div>
+            </div>
+            <div th:if="${taskNum}>0" class="ml-4 mb-3" style="font-size: 18px">現在のTodo数：<span th:text="${taskNum}"></span>件</div>
+            <div th:if="${taskNum}==0" class="ml-4" style="color: red; font-size: 18px">登録されたTodoはございません</div>
+            <div th:each="task:${tasks}" th:object="${task}">
+                <div class="card mb-2 ml-4 mr-4">
+                    <!--<p th:text="*{id}"></p>-->
+                    <h5 class="card-header" th:text="*{name}"></h5>
+                    <!--<div class="card-body">-->
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="pt-1 pl-1">期限：<span th:text="${#dates.format(task.due_date, 'yyyy年MM月dd日')}"></span></div>
+                                <div class="pt-1 pl-1 pb-1">作成日：<span th:text="${#dates.format(task.create_date, 'yyyy年MM月dd日')}"></span></div>
+                            </div>
+                            <div class="col-md-2">
+                                <!--<a th:if="*{!is_completed}" class="btn btn-warning btn_m" href="#">未完了</a>-->
+                                <!--<a th:if="*{is_completed}" class="btn btn-success btn_m" href="#">完了！</a>-->
+                                <form th:action="@{/{id}/changeStatus(id=*{id})}" th:method="put">
+                                    <input th:if="*{!is_completed}" class="btn btn-warning btn_m" type="submit" value="未完了" />
+                                    <input th:if="*{is_completed}" class="btn btn-success btn_m" type="submit" value="完了！" />
+                                </form>
+                            </div>
+                            <div class="col-md-1">
+                                <a class="btn btn-primary btn_m" th:href="@{/{id}/edit(id=*{id})}">編集</a>
+                            </div>
+                            <div class="col-md-1">
+                                <form th:action="@{/{id}(id=*{id})}" th:method="delete">
+                                    <input class="btn btn-danger btn_m" type="submit" value="削除" />
+                                </form>
+                            </div>
+                        </div>
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

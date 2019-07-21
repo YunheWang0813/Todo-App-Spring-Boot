@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <title>EDIT</title>
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <script src="/js/jquery.js"></script>
+        <script src="/js/bootstrap.bundle.js"></script>
+    </head>
+    <body>
+        <div class="container border-primary mt-3 mb-3 pb-3" style="background-color: rgba(117,112,118,0.33)">
+            <nav class="row navbar navbar-expand-md navbar-light bg-info">
+                <a href="/" class="navbar-brand mr-auto font-weight-bold">TODOリスト</a>
+                <a href="/search" class="navbar-brand">検索</a>
+            </nav>
+            <div class="card m-4">
+                <h5 class="card-header">ToDoの内容を変更します</h5>
+                <div class="card-body">
+                    <form th:action="@{/{id}(id=*{id})}" th:method="put" th:object="${task}">
+                        <div class="form-group">
+                            <label class="control-label">ToDo名</label>
+                            <input class="form-control" type="text" th:field="*{name}" />
+                            <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect</span>
+                            <span class="text-danger" th:if="${errorDupName}">This name is already used. Try another name</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">期限</label>
+                            <input class="form-control" type="date" th:field="*{due_date}" />
+                            <span class="text-danger" th:if="${#fields.hasErrors('due_date')}" th:errors="*{due_date}">Incorrect</span>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="hidden" th:field="*{create_date}" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="hidden" th:field="*{is_completed}" />
+                        </div>
+                        <div class="container">
+                            <a class="btn btn-secondary btn_w col-md-2 offset-md-4" href="/">戻る</a>
+                            <button class="btn btn-primary col-md-1 offset-md-2 btn_w" type="submit">更新</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!--<div class="container">-->
+            <!--<h3>ToDoの内容を変更します</h3>-->
+            <!--<form th:action="@{/{id}(id=*{id})}" th:method="put" th:object="${task}">-->
+                <!--<div class="form-group">-->
+                    <!--<label class="control-label">名前</label>-->
+                    <!--<input class="form-control" type="text" th:field="*{name}" required="required"/>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label class="control-label">期限</label>-->
+                    <!--<input class="form-control" type="date" th:field="*{due_date}" required="required"/>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<input class="form-control" type="hidden" th:field="*{create_date}" />-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<input class="form-control" type="hidden" th:field="*{is_completed}" />-->
+                <!--</div>-->
+                <!--<button class="btn btn-default" type="submit">更新</button>-->
+                <!--<a class="btn btn-default" href="/">戻る</a>-->
+            <!--</form>-->
+        <!--</div>-->
+    </body>
+</html>
